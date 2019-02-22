@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -44,6 +46,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         /**
+         * Send http request using Volley
+         */
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        /**
          * Activating the RecyclerView
          */
 
@@ -58,44 +66,48 @@ public class MainActivity extends Activity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        /**
-         * Send http request using Volley
-         */
-
-        requestQueue = Volley.newRequestQueue(this);
-
         characterList = new ArrayList<>();
 
+        // send request to populate character list
         sendRequest();
 
         // Set an adapter to pull data for the RecyclerView
-//        recyclerViewAdapter = new MarvelAdapter(dataset);
-//        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter = new MarvelAdapter(this, characterList);
+        recyclerView.setAdapter(recyclerViewAdapter);
     }
 
     public void sendRequest(){
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject response) {
 
-                for(int i = 0; i < response.length(); i++){
+                try {
+                    // Solved: https://stackoverflow.com/questions/12722468/org-json-jsonobject-cannot-be-converted-to-jsonarray-in-android
+//                    JSONObject obj = new JSONObject();
+//                    JSONArray data = new JSONArray(response);
+//
+//                    JSONArray jsonArray  = data.getJSONArray(0);
 
-                    Character ch = new Character();
+                    JSONArray jsonArray = new JSONArray(response);
+                    JSONObject jsonObject = new JSONObject();
 
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
+                    for(int i = 0; i < jsonArray.length(); i++){
 
-                        ch.setName(jsonObject.getString("name"));
-                        ch.setLocation(jsonObject.getString("location"));
-                        ch.setPowers(jsonObject.getString("powers"));
+                        Character ch = new Character();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                        ch.setName(obj.getString("name"));
+                        ch.setLocation(obj.getString("location"));
+                        ch.setPowers(obj.getString("powers"));
+
+                        characterList.add(ch);
+
                     }
 
-                    characterList.add(ch);
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
                 recyclerViewAdapter = new MarvelAdapter(MainActivity.this, characterList);
@@ -110,6 +122,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        requestQueue.add(jsonArrayRequest);
+        requestQueue.add(jsonObjectRequest);
     }
 }

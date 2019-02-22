@@ -15,6 +15,39 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
     private Context context;
     private List<Character> characterList;
 
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public MarvelAdapter(Context context, List characterList) {
+        this.context = context;
+        this.characterList = characterList;
+    }
+
+    // Create new views (invoked by the layout manager)
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_character, parent, false);
+
+        MyViewHolder viewHolder = new MyViewHolder(v);
+        return viewHolder;
+    }
+
+    // Bind the view holder to its data (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(MyViewHolder viewHolder, int position) {
+
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
+        viewHolder.itemView.setTag(characterList.get(position));
+
+        Character ch = characterList.get(position);
+
+        viewHolder.name.setText(ch.getName());
+        viewHolder.location.setText(ch.getLocation());
+        viewHolder.powers.setText(ch.getPowers());
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -25,12 +58,13 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
         public TextView location;
         public TextView powers;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
+        // instantiate the view item
+        public MyViewHolder(View item) {
+            super(item);
 
-            name = (TextView) itemView.findViewById(R.id.txt_name);
-            location = (TextView) itemView.findViewById(R.id.txt_location);
-            powers = (TextView) itemView.findViewById(R.id.txt_powers);
+            name = (TextView) item.findViewById(R.id.txt_name);
+            location = (TextView) item.findViewById(R.id.txt_location);
+            powers = (TextView) item.findViewById(R.id.txt_powers);
 
             // Define what happens when you click on a single list item
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -45,36 +79,7 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MarvelAdapter(Context context, List characterList) {
-        this.context = context;
-        this.characterList = characterList;
-    }
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public MarvelAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_row_characters, parent, false);
-
-        return new MyViewHolder(v);
-    }
-
-    // Bind the view holder to its data (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.itemView.setTag(characterList.get(position));
-
-        Character ch = characterList.get(position);
-
-        holder.name.setText(ch.getName());
-        holder.location.setText(ch.getLocation());
-        holder.powers.setText(ch.getPowers());
-    }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

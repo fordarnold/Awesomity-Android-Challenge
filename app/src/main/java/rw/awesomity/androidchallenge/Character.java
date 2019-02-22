@@ -1,7 +1,7 @@
 package rw.awesomity.androidchallenge;
 
 /**
- * A character is a what is displayed in each list item of the RecyclerView
+ * A Character is a what is displayed in each list item of the RecyclerView
  */
 public class Character {
 
