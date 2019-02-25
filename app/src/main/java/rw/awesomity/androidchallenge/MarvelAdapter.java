@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -52,9 +54,9 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
         viewHolder.name.setText(ch.getName());
         viewHolder.location.setText(ch.getLocation());
         viewHolder.powers.setText(ch.getPowers());
-        viewHolder.photo.setImageURI(ch.getPhoto());
 
-        Picasso.with(this).load(ch.getPhoto()).into(viewHolder.photo);
+        // load remote images into the app using Picasso library
+        Picasso.get().load(ch.getPhoto()).into(viewHolder.photo);
 
     }
 
