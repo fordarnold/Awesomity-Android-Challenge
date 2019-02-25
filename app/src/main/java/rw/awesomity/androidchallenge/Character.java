@@ -1,17 +1,23 @@
 package rw.awesomity.androidchallenge;
 
+import android.net.Uri;
+
 /**
- * A Character is a what is displayed in each list item of the RecyclerView
+ * A Character is a what is displayed in each list item of the RecyclerView.
+ *
+ * This class allows us to initialise data for a Character.
+ *
  */
 public class Character {
 
     private String name, location, powers;
+    private Uri photo;
 
     public Character(){
 
     }
 
-    public Character(String name, String location, String powers) {
+    public Character(String name, String location, String powers, String photo) {
         this.name = name;
         this.location = location;
         this.powers = powers;
@@ -39,5 +45,13 @@ public class Character {
 
     public void setPowers(String powers) {
         this.powers = powers;
+    }
+
+    public Uri getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Uri photo) {
+        this.photo = photo;
     }
 }

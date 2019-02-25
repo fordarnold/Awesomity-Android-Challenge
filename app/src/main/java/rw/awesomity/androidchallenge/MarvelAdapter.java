@@ -5,11 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
+/**
+ * This adapter is used to transport and manipulate data
+ * for the RecyclerView.
+ *
+ */
 public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHolder> {
 
     private Context context;
@@ -38,17 +44,19 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder viewHolder, int position) {
 
         // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         viewHolder.itemView.setTag(characterList.get(position));
 
         Character ch = characterList.get(position);
 
+        // - replace the contents of the view with that element
         viewHolder.name.setText(ch.getName());
         viewHolder.location.setText(ch.getLocation());
         viewHolder.powers.setText(ch.getPowers());
+        viewHolder.photo.setImageURI(ch.getPhoto());
+
     }
 
-    // Provide a reference to the views for each data item
+    // Provide a reference to the views for each data item.
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -57,6 +65,7 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
         public TextView name;
         public TextView location;
         public TextView powers;
+        public ImageView photo;
 
         // instantiate the view item
         public MyViewHolder(View item) {
@@ -65,6 +74,7 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
             name = (TextView) item.findViewById(R.id.txt_name);
             location = (TextView) item.findViewById(R.id.txt_location);
             powers = (TextView) item.findViewById(R.id.txt_powers);
+            photo = (ImageView) item.findViewById(R.id.img_photo);
 
             // Define what happens when you click on a single list item
             itemView.setOnClickListener(new View.OnClickListener() {

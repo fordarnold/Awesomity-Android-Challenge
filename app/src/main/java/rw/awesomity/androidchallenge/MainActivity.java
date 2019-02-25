@@ -1,6 +1,7 @@
 package rw.awesomity.androidchallenge;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity {
     // Set the URL string where data is retrieved from
     String url = "https://awesomity.rw/api/sample/challenge/data/json";
 
+    // Specify what happens on creation of the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class MainActivity extends Activity {
          * Send http request using Volley
          */
 
+        // Initialise the Request Queue from Volley
         requestQueue = Volley.newRequestQueue(this);
 
         /**
@@ -71,11 +75,14 @@ public class MainActivity extends Activity {
         // send request to populate character list
         sendRequest();
 
-        // Set an adapter to pull data for the RecyclerView
-        recyclerViewAdapter = new MarvelAdapter(this, characterList);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        // Set an adapter to pull data for the RecyclerView (already done in sendRequest())
+//        recyclerViewAdapter = new MarvelAdapter(this, characterList);
+//        recyclerView.setAdapter(recyclerViewAdapter);
     }
 
+    /**
+     * Make an HTTP request to the server
+     */
     public void sendRequest(){
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -86,11 +93,8 @@ public class MainActivity extends Activity {
                     // Solved: https://stackoverflow.com/questions/12722468/org-json-jsonobject-cannot-be-converted-to-jsonarray-in-android
 //                    JSONObject obj = new JSONObject();
 //                    JSONArray data = new JSONArray(response);
-//
-//                    JSONArray jsonArray  = data.getJSONArray(0);
 
-                    JSONArray jsonArray = new JSONArray(response);
-                    JSONObject jsonObject = new JSONObject();
+                    JSONArray jsonArray = response.getJSONArray("data");
 
                     for(int i = 0; i < jsonArray.length(); i++){
 
@@ -101,6 +105,7 @@ public class MainActivity extends Activity {
                         ch.setName(obj.getString("name"));
                         ch.setLocation(obj.getString("location"));
                         ch.setPowers(obj.getString("powers"));
+                        ch.setPhoto(Uri.parse(obj.getString("avatar")));
 
                         characterList.add(ch);
 
@@ -118,7 +123,7 @@ public class MainActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("Volley Error: ", error.toString());
+                Log.i("Volley Error: ~~~ ", error.toString());
             }
         });
 
