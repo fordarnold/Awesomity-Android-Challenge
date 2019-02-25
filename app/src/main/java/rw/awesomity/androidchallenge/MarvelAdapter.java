@@ -54,6 +54,8 @@ public class MarvelAdapter extends RecyclerView.Adapter<MarvelAdapter.MyViewHold
         viewHolder.powers.setText(ch.getPowers());
         viewHolder.photo.setImageURI(ch.getPhoto());
 
+        Picasso.with(this).load(ch.getPhoto()).into(viewHolder.photo);
+
     }
 
     // Provide a reference to the views for each data item.

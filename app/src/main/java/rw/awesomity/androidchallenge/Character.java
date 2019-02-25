@@ -17,10 +17,11 @@ public class Character {
 
     }
 
-    public Character(String name, String location, String powers, String photo) {
+    public Character(String name, String location, String powers, Uri photo) {
         this.name = name;
         this.location = location;
         this.powers = powers;
+        this.photo = photo;
     }
 
     public String getName() {
